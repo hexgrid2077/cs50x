@@ -3,9 +3,8 @@
 
 int main(void)
 {
-    int quarters = 0, dimes, nickels, pennies;
-    int change = -1;
-
+    int quarters = 0, dimes, nickels, pennies, change;  
+    change = -1;
     while (change < 0 || change > 99)
     {
         change = get_int("Change owed: ");
