@@ -13,7 +13,7 @@ int main(void)
 
 void draw(int n)
 {
-    // Base case
+    // Base case -- When to stop running the function
     if (n <= 0)
     {
         return;
