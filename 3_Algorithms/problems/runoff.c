@@ -127,6 +127,9 @@ int main(int argc, string argv[])
 bool vote(int voter, int rank, string name)
 {
     // TODO
+    // If candidate found:
+    preferences[voter][rank] = candidate[1].name;
+    // If candidate not found:
     return false;
 }
 
@@ -164,3 +167,11 @@ void eliminate(int min)
     // TODO
     return;
 }
+
+
+/*
+Working on the Vote function.
+Call is on line 74
+Function starts on line 127
+Need to check if the voter exists so we might have to run a loop here.
+*/ 
