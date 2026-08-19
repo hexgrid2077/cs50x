@@ -1,5 +1,6 @@
 #include <cs50.h>
 #include <stdio.h>
+#include <string.h>
 
 // Max voters and candidates
 #define MAX_VOTERS 100
@@ -64,7 +65,6 @@ int main(int argc, string argv[])
     // Keep querying for votes
     for (int i = 0; i < voter_count; i++)
     {
-
         // Query for each rank
         for (int j = 0; j < candidate_count; j++)
         {
@@ -76,8 +76,9 @@ int main(int argc, string argv[])
                 printf("Invalid vote.\n");
                 return 4;
             }
+            else
+                printf("Voter valid.\n");
         }
-
         printf("\n");
     }
 
@@ -126,17 +127,40 @@ int main(int argc, string argv[])
 // Record preference if vote is valid
 bool vote(int voter, int rank, string name)
 {
-    // TODO
-    // If candidate found:
-    preferences[voter][rank] = candidate[1].name;
-    // If candidate not found:
+    // First check if candidate found:
+    for (int i = 0; i < candidate_count; i++)
+    {
+        if (!strcmp(candidates[i].name, name))
+        {
+            // Then record the candidate in preferences, the voter's 2d array.
+            preferences[voter][rank] = i;
+            // preferences[voter][rank] = candidate[1].name;
+            return true;
+        }
+    }
     return false;
 }
 
 // Tabulate votes for non-eliminated candidates
 void tabulate(void)
 {
-    // TODO
+    // loop through preferences[voter] struct (double loop here i and j)
+    // looping through voters
+    for (int i = 0; i < voter_count; i++)
+    {
+        // looping through candidate preferences
+        for (int j = 0; j < candidate_count; j++)
+        // if their top candidate is not eliminated, then add a vote.
+        if (!candidates[i].eliminated)
+        {
+            // add a vote to that candidate.
+            candidates[i].votes += 1;
+            printf("One vote for %s\n", candidates[i].name);
+        }
+        // TODO The wheels fell off here, I think this section is checking the wrong thing. It is an infinite loop.
+        // But if their top candidate IS eliminated, 
+        // automatically go j+1 and see if that candidate is eliminated then add a vote.
+    }        
     return;
 }
 
@@ -170,8 +194,20 @@ void eliminate(int min)
 
 
 /*
-Working on the Vote function.
-Call is on line 74
-Function starts on line 127
-Need to check if the voter exists so we might have to run a loop here.
+preferences[voter][candidate preference] = whichever candidate
+
+./runoff alice bob charlie
+preference[0][1] = 0
+First voter, second preference = alice (candidate 0)
+
+preferences[2][0] = 1
+third voter, first preference is bob (candidate 1)
+
+so it'll be like this order
+voter 1: if you're going Alice then Bob then Charlie in that order:
+preference[0][0] = 0;
+preference[0][1] = 1;
+preference[0][2] = 2;
+
+WORKING ON TABULATE -- Call line 89; function line 145
 */ 
