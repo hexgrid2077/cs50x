@@ -31,6 +31,7 @@ bool print_winner(void);
 int find_min(void);
 bool is_tie(int min);
 void eliminate(int min);
+int get_vote(int voter);
 
 int main(int argc, string argv[])
 {
@@ -76,8 +77,8 @@ int main(int argc, string argv[])
                 printf("Invalid vote.\n");
                 return 4;
             }
-            else
-                printf("Voter valid.\n");
+            // else
+            //     printf("Voter valid.\n");
         }
         printf("\n");
     }
@@ -86,7 +87,10 @@ int main(int argc, string argv[])
     while (true)
     {
         // Calculate votes given remaining candidates
+        printf("Tabulating... Line 91 isn't doing anything....\n");
         tabulate();
+        printf("Done tabulating...\n");
+        return 0;
 
         // Check if election has been won
         bool won = print_winner();
@@ -144,24 +148,37 @@ bool vote(int voter, int rank, string name)
 // Tabulate votes for non-eliminated candidates
 void tabulate(void)
 {
-    // loop through preferences[voter] struct (double loop here i and j)
-    // looping through voters
-    for (int i = 0; i < voter_count; i++)
+    // loop through all VOTERS
+    printf("Tabulate: looping through all voters...\n");
+    for (int voter = 0; voter < voter_count; voter++)
     {
-        // looping through candidate preferences
-        for (int j = 0; j < candidate_count; j++)
-        // if their top candidate is not eliminated, then add a vote.
-        if (!candidates[i].eliminated)
-        {
-            // add a vote to that candidate.
-            candidates[i].votes += 1;
-            printf("One vote for %s\n", candidates[i].name);
-        }
-        // TODO The wheels fell off here, I think this section is checking the wrong thing. It is an infinite loop.
-        // But if their top candidate IS eliminated, 
-        // automatically go j+1 and see if that candidate is eliminated then add a vote.
-    }        
+        // Get the top vote candidate using the get_vote function
+        int candidate_to_vote_for = get_vote(voter);
+        printf("We think the candidate to vote for is: %i\n", candidate_to_vote_for);
+        // add that vote
+        candidates[candidate_to_vote_for].votes += 1;
+    }
     return;
+}
+
+int get_vote(int voter) // TODO still have to prototype this too.
+{
+    int candidate_to_vote_for;
+    int pref = 0;
+    // loop through the preferences array til you find a candidate that's not eliminated
+    for (int i = 0; i < candidate_count; i++)
+    {
+        while (true)
+        {
+            int candidate_check = preferences[voter][i]; // shortening this up because it's a long one.
+            if (!candidates[candidate_check].eliminated)
+                // return the candidate they're voting for.
+                return candidate_to_vote_for; // be done. End of loop for that voter.
+        }
+        // return the top candidate for that voter.
+        // get out so the loop stops.
+    }
+    return candidate_to_vote_for;
 }
 
 // Print the winner of the election, if there is one
