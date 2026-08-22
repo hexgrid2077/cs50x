@@ -87,10 +87,10 @@ int main(int argc, string argv[])
     while (true)
     {
         // Calculate votes given remaining candidates
-        printf("Tabulating... Line 91 isn't doing anything....\n");
+        printf("Tabulating...\n");
         tabulate();
         printf("Done tabulating...\n");
-        return 0;
+        // return 0;
 
         // Check if election has been won
         bool won = print_winner();
@@ -110,7 +110,7 @@ int main(int argc, string argv[])
             {
                 if (!candidates[i].eliminated)
                 {
-                    printf("%s\n", candidates[i].name);
+                    printf("Tie with %s\n", candidates[i].name);
                 }
             }
             break;
@@ -164,7 +164,6 @@ void tabulate(void)
 int get_vote(int voter) // TODO still have to prototype this too.
 {
     int candidate_to_vote_for;
-    int pref = 0;
     // loop through the preferences array til you find a candidate that's not eliminated
     for (int i = 0; i < candidate_count; i++)
     {
@@ -173,31 +172,54 @@ int get_vote(int voter) // TODO still have to prototype this too.
             int candidate_check = preferences[voter][i]; // shortening this up because it's a long one.
             if (!candidates[candidate_check].eliminated)
                 // return the candidate they're voting for.
-                return candidate_to_vote_for; // be done. End of loop for that voter.
+                return candidate_check; // be done. End of loop for that voter.
         }
         // return the top candidate for that voter.
         // get out so the loop stops.
     }
-    return candidate_to_vote_for;
+    return candidate_to_vote_for; // It shouldn't actually get here i just had to return an int.
 }
 
 // Print the winner of the election, if there is one
 bool print_winner(void)
 {
-    // TODO
+    // Check if there's a winner.
+    // figure out what amount of votes you'd need and if they have it, then you're done.
+    int winning_vote_count = voter_count / 2;
+    printf("Well, you need over %i votes to win.\n", winning_vote_count);
+    // go thru candidates and find out non-eliminated ones and then see if their votes are win it.
+    for (int i = 0; i < voter_count; i++)
+    {
+        if (!candidates[i].eliminated)
+        {
+            if (candidates[i].votes > winning_vote_count)
+            {
+                printf("AND THE WINNER IS... %s\n", candidates[i].name);
+                return true;
+            }
+        }
+    }
     return false;
 }
 
 // Return the minimum number of votes any remaining candidate has
 int find_min(void)
 {
-    // TODO
-    return 0;
+    int lowest_votes;
+    // Find the one candidate with the lowest votes
+    for (int i = 0; i < candidate_count; i++)
+    {
+        if (candidates[i].votes > lowest_votes)
+        lowest_votes = candidates[i].votes;
+        printf("The lowest number of votes is %s with %i votes.", candidates[i].name, candidates[i].votes);
+    }
+    return lowest_votes;
 }
 
 // Return true if the election is tied between all candidates, false otherwise
 bool is_tie(int min)
 {
+    // figure out if any candidates have the same number.
     // TODO
     return false;
 }
