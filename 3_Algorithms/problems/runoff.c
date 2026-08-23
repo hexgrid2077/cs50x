@@ -101,18 +101,12 @@ int main(int argc, string argv[])
 
         // Eliminate last-place candidates
         int min = find_min();
+        printf("min is... %i\n", min);
         bool tie = is_tie(min);
 
         // If tie, everyone wins
         if (tie)
         {
-            for (int i = 0; i < candidate_count; i++)
-            {
-                if (!candidates[i].eliminated)
-                {
-                    printf("Tie with %s\n", candidates[i].name);
-                }
-            }
             break;
         }
 
@@ -209,25 +203,44 @@ int find_min(void)
     // Find the one candidate with the lowest votes
     for (int i = 0; i < candidate_count; i++)
     {
-        if (candidates[i].votes > lowest_votes)
-        lowest_votes = candidates[i].votes;
-        printf("The lowest number of votes is %s with %i votes.", candidates[i].name, candidates[i].votes);
+        if (candidates[i].votes < lowest_votes)
+        lowest_votes = i;
     }
-    return lowest_votes;
+    printf("The lowest number of votes is %s with %i votes.\n", candidates[lowest_votes].name, candidates[lowest_votes].votes);
+    return candidates[lowest_votes].votes;
 }
 
 // Return true if the election is tied between all candidates, false otherwise
+
 bool is_tie(int min)
 {
     // figure out if any candidates have the same number.
-    // TODO
+    for (int i = 0; i < candidate_count; i++)
+    {
+        for (int j = 0; j < candidate_count; j++)
+        if (candidates[i].eliminated == false && candidates[j].eliminated == false)
+        {
+            if (candidates[i].name != candidates[j].name && candidates[i].votes == candidates[j].votes)
+            {
+                printf("Tie with %s and %s\n", candidates[i].name, candidates[j].name);
+                return true;
+            }
+        }
+    }
     return false;
 }
 
 // Eliminate the candidate (or candidates) in last place
 void eliminate(int min)
 {
-    // TODO
+    for (int i = 0; i < candidate_count; i++)
+    {
+        if (candidates[i].votes == min)
+        {
+            candidates[i].eliminated = true;
+            printf("Eliminating %s\n", candidates[i].name);
+        }
+    }
     return;
 }
 
