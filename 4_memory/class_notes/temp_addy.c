@@ -9,5 +9,9 @@ int main(void)
     printf("%p\n\n", s);
     printf("%p\n", &s[0]);
     printf("%p\n", &s[1]);
-    printf("%p\n", &s[2]);
+    printf("%p\n\n", &s[2]);
+
+    printf("%s\n", s);
+    printf("%s\n", s + 1);
+    printf("%s\n", s + 2);
 }
