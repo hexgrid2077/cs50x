@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
     int filename_length = strlen(argv[1]);
 
     // Create a new block of memory to store filename
-    char *filename = malloc(sizeof(char) * filename_length);
+    char *filename = malloc((sizeof(char) * filename_length) + 1);
 
     // Check if malloc failed
     if (filename == NULL)
@@ -34,4 +34,6 @@ int main(int argc, char *argv[])
         printf("Could not create file.");
         return 1;
     }
+    fclose(new_file);
+    free(filename);
 }
