@@ -3,11 +3,11 @@
 
 int main(void)
 {
-    string s = "HI!";
-    printf("%p\n", &s[0]);
-    printf("%p\n", s);
-    printf("%s\n", s);
+    char* s = "HI!";
 
-    string* t = &s;
-    printf("%s\n", *t);
+    printf("%s", s);
+    printf("%s", s + 1);
+    printf("%s", s + 2);
+    printf("\n");
 }
+
