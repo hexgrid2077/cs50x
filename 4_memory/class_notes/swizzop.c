@@ -9,11 +9,8 @@ int main(void)
     int x = 1;
     int y = 2;
 
-    int* px = &x;
-    int* py = &y;
-
     printf("x is %i, y ix %i\n", x, y);
-    swap(px, py);
+    swap(&x, &y);
     printf("x is %i, y ix %i\n", x, y);
 }
 
@@ -23,4 +20,3 @@ void swap(int* a, int* b)
     *a = *b;
     *b = tmp;
 }
-
