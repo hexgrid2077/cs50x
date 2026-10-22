@@ -11,3 +11,6 @@ void reflect(int height, int width, RGBTRIPLE image[height][width]);
 
 // Blur image
 void blur(int height, int width, RGBTRIPLE image[height][width]);
+
+// Find Edges
+void edges(int height, int width, RGBTRIPLE image[height][width]);
