@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 int main(int argc, char* argv[])
@@ -22,7 +21,7 @@ int main(int argc, char* argv[])
         return 1;
     }
 
-    // Copy argv[1] into block of memroy for filename
+    // Copy argv[1] into block of memory for filename
     sprintf(filename, "%s", argv[1]);    
 
     // Open new file under the name stored at filename
