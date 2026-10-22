@@ -72,24 +72,25 @@ void reflect(int height, int width, RGBTRIPLE image[height][width])
     // loop over all pixels
     for (int i = 0; i < height; i++)
     {
-        for (int j = 0; j < width; j++)
+        int halfway = width / 2;
+        for (int j = 0; j < halfway; j++)
         {
             // Swap pixels
-            int new_loc = width - j;
-
-            // Place in oppsite side
-            // image[i][new_loc].rgbtRed = image[i][j].rgbtRed;
-            // image[i][new_loc].rgbtGreen = image[i][j].rgbtGreen;
-            // image[i][new_loc].rgbtBlue = image[i][j].rgbtBlue;
-
-            // Tried flipping it around but it looks the same.
-            image[i][j].rgbtRed = image[i][new_loc].rgbtRed;
-            image[i][j].rgbtGreen = image[i][new_loc].rgbtGreen;
-            image[i][j].rgbtBlue = image[i][new_loc].rgbtBlue;
-            // TODO: I am really stuck here. I need to think about how the pixels get laid out.
-            // TODO: The issue is it's mirroring from the center so not the other side. I wonder if using the total width was the way.
-            // TODO: The problem is that it's overwriting everything by the time it gets to the other end.
-            // May be just do it on paper in like a 5 or 10 pixel graph just to see how you'd do it.
+            int Rswapspace;
+            int Gswapspace;
+            int Bswapspace;
+            Rswapspace = image[i][j].rgbtRed;
+            Gswapspace = image[i][j].rgbtGreen;
+            Bswapspace = image[i][j].rgbtBlue;
+            // Now make the left side equal the right.
+            image[i][j].rgbtRed = image[i][width - j].rgbtRed;
+            image[i][j].rgbtGreen = image[i][width - j].rgbtGreen;
+            image[i][j].rgbtBlue = image[i][width - j].rgbtBlue;
+            // Then use the swapspace squares to fill the right.
+            // Maybe only go to the middle?
+            image[i][width - j].rgbtRed = Rswapspace;
+            image[i][width - j].rgbtGreen = Gswapspace;
+            image[i][width - j].rgbtBlue = Bswapspace;
         }
     }
     return;
@@ -98,5 +99,50 @@ void reflect(int height, int width, RGBTRIPLE image[height][width])
 // Blur image
 void blur(int height, int width, RGBTRIPLE image[height][width])
 {
+    // Create a copy of the image
+    RGBTRIPLE copy[height][width];
+    for (int i = 0; i < height; i++)
+    {
+        for (int j = 0; j < width; j++)
+        {
+            copy[i][j] = image[i][j];
+        }
+    }
+    // Do a loop for each pixel in copy
+    for (int i = 0; i < height; i++)
+    {
+        for (int j = 0; j < width; j++)
+        {
+        // TODO: Find the average of the 9 squares including the same square
+        int Rtop = copy[i - 1][j - 1].rgbtRed + copy[i - 1][j].rgbtRed + copy[i - 1][j + 1].rgbtRed;
+        int Rmid = copy[i][j - 1].rgbtRed + copy[i][j].rgbtRed + copy[i][j + 1].rgbtRed;
+        int Rbot = copy[i + 1][j - 1].rgbtRed + copy[i + 1][j].rgbtRed + copy[i + 1][j + 1].rgbtRed;
+        int Ravg = (Rtop + Rmid + Ravg) / 3;
+            
+        int Gtop = copy[i - 1][j - 1].rgbtGreen + copy[i - 1][j].rgbtGreen + copy[i - 1][j + 1].rgbtGreen;
+        int Gmid = copy[i][j - 1].rgbtGreen + copy[i][j].rgbtGreen + copy[i][j + 1].rgbtGreen;
+        int Gbot = copy[i + 1][j - 1].rgbtGreen + copy[i + 1][j].rgbtGreen + copy[i + 1][j + 1].rgbtGreen;
+        int Gavg = (Gtop + Gmid + Gavg) / 3;
+
+        int Btop = copy[i - 1][j - 1].rgbtBlue + copy[i - 1][j].rgbtBlue + copy[i - 1][j + 1].rgbtBlue;
+        int Bmid = copy[i][j - 1].rgbtBlue + copy[i][j].rgbtBlue + copy[i][j + 1].rgbtBlue;
+        int Bbot = copy[i + 1][j - 1].rgbtBlue + copy[i + 1][j].rgbtBlue + copy[i + 1][j + 1].rgbtBlue;
+        int Bavg = (Btop + Bmid + Bavg) / 3;
+
+        // Use that average value for the pixel in 'image' -- The original copy.
+        image[i][j].rgbtRed = Ravg;
+        image[i][j].rgbtGreen = Gavg;
+        image[i][j].rgbtBlue = Bavg;
+
+        }
+    }
+
+
+
+
+
+
+
     return;
 }
+        int Ravg = (Rtop + Rmid + Ravg) / 3;
