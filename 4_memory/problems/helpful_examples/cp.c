@@ -1,4 +1,4 @@
-L#include <stdio.h>
+#include <stdio.h>
 
 typedef unsigned char BYTE;
 
