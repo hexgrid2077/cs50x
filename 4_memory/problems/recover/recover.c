@@ -3,9 +3,8 @@
 #include <stdlib.h>
  
 typedef unsigned char BYTE; // Stole this code from cp.c
-const int HEADER_SIZE = 32; // Assuming each of the four bytes is 8 bits.
-uint8_t buffer[512];
-uint8_t signature[] = {0xff, 0xd8, 0xff, 0xef}; // Do I need to run an array for the possible combos of the 4th byte?
+const int HEADER_SIZE = 3; // Assuming each of the four bytes is 8 bits.
+int COUNTER = 000;
 
 int main(int argc, char *argv[])
 {
@@ -15,7 +14,6 @@ int main(int argc, char *argv[])
         printf("ERROR: Usage is ./recover [filename.raw]\n");
         return 1;
     }
-     
 
     char* filename = argv[1];
     FILE* cardfile = fopen(filename, "r");
@@ -25,19 +23,28 @@ int main(int argc, char *argv[])
         printf("Cannot open image.\n");
         return 1;
     }
-    // TODO: Look for the beginning of a JPEG file. Use the HEADER_SIZE variable here.
-    BYTE b;
-    while (fread(buffer, 1, 1, cardfile) != 0); // Using 1 as the number of elements and size because we'll go for the header size.
+
+    uint8_t buffer[512];
+    // While there's still data left to read on the memory card
+    while (fread(&buffer, sizeof(buffer), 1, cardfile) != 0) // First have the outside loop that reads 512 byte blocks
     {
-    fread(&b, HEADER_SIZE, 1, buffer);
-    printf("If it's a jpeg, create a new file.\n");
-    // printf("%i\n", buffer[i]);
+        if (buffer[0] == 0xff && buffer[1] == 0xd8 && buffer[2]) 
+        {
+            if (buffer[3] == 0xe0 || buffer[3] == 0xe1 || buffer[3] == 0xe2 || buffer[3] == 0xe3 || buffer[3] == 0xe4 || buffer[3] == 0xe5 || buffer[3] == 0xe6 || buffer[3] == 0xe7 || buffer[3] == 0xe8 || buffer[3] == 0xe9 || buffer[3] == 0xea || buffer[3] == 0xeb || buffer[3] == 0xec || buffer[3] == 0xed || buffer[3] == 0xee || buffer[3] == 0xef)
+            {
+                printf("This is NEW JPEG #%i\n", COUNTER);
+                COUNTER = COUNTER + 1;
+                // TODO: Write to the new image
+                fwrite()
+            }
+        }
+        else
+        {
+            // TODO: Else: keep writing to the current image.
+            printf("Keep writing on the same JPEG\n");
+        }
+        // printf("%i\n", buffer[i]);
     }
+    // Close the memory card
     fclose(cardfile);
-    // pdf.c in Section is the best example here.
-    // TODO: Do we have to do something about the 0xea 0xeb etc like have an array of the 16 possible combinations of the last hex letter?
-    
-    // TODO: while there' still data left to read on the memory card
-        // TODO: Go 512B bytes, we can use the first problem for the byte sizes that was in the header for pdf or something. TODO: Create JPEGs from the data.
-        // Use fread and fwrite
 }
