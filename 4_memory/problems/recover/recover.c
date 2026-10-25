@@ -1,13 +1,15 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
- 
-typedef unsigned char BYTE; // Stole this code from cp.c
 const int HEADER_SIZE = 3; // Assuming each of the four bytes is 8 bits.
-int COUNTER = 000;
+int fuckingcounter = 0;
+int* COUNTER = &fuckingcounter;
 
 int main(int argc, char *argv[])
 {
+    char* jpegname = malloc(8);
+    sprintf(jpegname, "images/%03i.jpg", *COUNTER);
+
     // Do something if they only have one command line argument. It should be filename.raw and that's it.
     if (argc != 2)
     {
@@ -32,19 +34,23 @@ int main(int argc, char *argv[])
         {
             if (buffer[3] == 0xe0 || buffer[3] == 0xe1 || buffer[3] == 0xe2 || buffer[3] == 0xe3 || buffer[3] == 0xe4 || buffer[3] == 0xe5 || buffer[3] == 0xe6 || buffer[3] == 0xe7 || buffer[3] == 0xe8 || buffer[3] == 0xe9 || buffer[3] == 0xea || buffer[3] == 0xeb || buffer[3] == 0xec || buffer[3] == 0xed || buffer[3] == 0xee || buffer[3] == 0xef)
             {
-                printf("This is NEW JPEG #%i\n", COUNTER);
-                COUNTER = COUNTER + 1;
-                // TODO: Write to the new image
-                fwrite()
+                sprintf(jpegname, "images/%03i.jpg", *COUNTER);
+                printf("This is NEW JPEG #%i or %s\n", *COUNTER, jpegname);
+                *COUNTER = *COUNTER + 1;
+                // Write to the new image
+                FILE* current_jpg = fopen(jpegname, "w");
+                fwrite(&buffer, 512, 1, current_jpg);
             }
         }
         else
         {
-            // TODO: Else: keep writing to the current image.
-            printf("Keep writing on the same JPEG\n");
+            // Else: keep writing to the current image.
+            FILE* current_jpg = fopen(jpegname, "a");
+            fwrite(&buffer, 512, 1, current_jpg);
         }
         // printf("%i\n", buffer[i]);
     }
     // Close the memory card
     fclose(cardfile);
+    free(jpegname);
 }

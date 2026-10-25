@@ -10,7 +10,7 @@ int main(void)
     printf("\nChanging the value of the b pointer location...\n");
     
     *b = 5000;
-    printf("a: %i\tb: %p\n", a, b);
+    printf("a: %i\tb: %p\n", *b, b);
     
 }
 
