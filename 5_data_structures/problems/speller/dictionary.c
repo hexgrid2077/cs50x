@@ -36,6 +36,17 @@ unsigned int hash(const char *word)
 bool load(const char *dictionary)
 {
     // TODO
+    FILE *source = fopen(dictionary, "r");
+
+    // Read each word in the FILE
+    char* word fread(source, "%s", word);
+    //TODO: Get old code for the loop for this. while not eof, grab each word, put in hash table.
+    
+    // Add each word to the hash table
+        
+
+    // Close the dictionary file
+    fclose(source);
     return false;
 }
 
