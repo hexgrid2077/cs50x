@@ -5,16 +5,46 @@ import sys
 def main():
 
     # TODO: Check for command-line usage
-    database = sys.argv[1]
-    sequence = sys.argv[2]
+    # database = sys.argv[1]
+    database = "databases/small.csv"
+    # sequence = sys.argv[2]
+    sequence = "sequences/1.txt"
     print(f"Database: {database}")
     print(f"Sequence: {sequence}")
 
     # TODO: Read database file into a variable
-    
+    patternlist = []
+    clientlist = []
+    with open("databases/small.csv", newline='') as csvfile:
+        reader = csv.DictReader(csvfile)
+        patternlist = reader.fieldnames
+        for row in reader:
+            clientlist.append(row)
+
+    print(patternlist)
+    print(clientlist)
+
     # TODO: Read DNA sequence file into a variable
 
+    with open("sequences/1.txt", "r") as file:
+        seq = file.read()
+        print(seq)
+
+    pattern = "AGATC"
+    print(f"{pattern} is {len(pattern)} characters.")
+
+    if pattern in seq:
+        print("Yes it is in the sequence")
+
+    count = 0
+    for i in range(len(seq)):
+        if pattern in seq[i:(i+len(pattern))]:
+            count += 1
+
+    print(count)
+    
     # TODO: Find longest match of each STR in DNA sequence
+    # TODO: LOL it's messy but here.
 
     # TODO: Check database for matching profiles
 
